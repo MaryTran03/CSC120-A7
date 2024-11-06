@@ -11,6 +11,14 @@ public class Library extends Building {
     private Hashtable<String, Boolean> collection;
     private boolean hasElevator;
 
+    /**
+     * Constructs a new Library object with the specified attributes.
+     *
+     * @param name       the name of the library
+     * @param address    the address of the library
+     * @param nFloors    the number of floors in the library
+     * @param hasElevator whether the library has an elevator
+     */
     public Library(String name, String address, int nFloors, boolean hasElevator) {
         super(name, address, nFloors);
         this.collection = new Hashtable<>();
@@ -18,12 +26,32 @@ public class Library extends Building {
         System.out.println("You have built a library!");
     }
 
+    /**
+     * Overloaded constructor that defaults to a single floor and no elevator.
+     *
+     * @param name    the name of the library
+     * @param address the address of the library
+     */
+    public Library(String name, String address) {
+        this(name, address, 1, false); // Default to 1 floor, no elevator
+    }
+
+    /**
+     * Displays available options for actions that can be performed in the library.
+     */
     @Override
     public void showOptions() {
         super.showOptions();
         System.out.println(" + addTitle(title) \n + removeTitle(title) \n + checkOut(title) \n + returnBook(title) \n + printCollection()");
     }
 
+    /**
+     * Moves to the specified floor in the library. If the library has an elevator,
+     * it allows non-adjacent floor access.
+     *
+     * @param floorNum the floor number to navigate to
+     * @throws RuntimeException if the floor transition is not valid without an elevator
+     */
     @Override
     public void goToFloor(int floorNum) {
         if (hasElevator || Math.abs(this.activeFloor - floorNum) == 1) {
@@ -47,12 +75,11 @@ public class Library extends Building {
         }
     }
 
-    // Overloaded Constructor with default single floor
-    public Library(String name, String address) {
-        this(name, address, 1, false); // Default to 1 floor, no elevator
-    }
-
-    // Overloaded addTitle method to add multiple books at once
+    /**
+     * Overloaded method to add multiple book titles to the library collection at once.
+     *
+     * @param titles the list of book titles to add
+     */
     public void addTitle(ArrayList<String> titles) {
         for (String title : titles) {
             if (!this.collection.containsKey(title)) {
@@ -144,8 +171,13 @@ public class Library extends Building {
         }
     }
 
+    /**
+     * Main method to test the Library class functionality.
+     *
+     * @param args command-line arguments
+     */
     public static void main(String[] args) {
-        Library Neilson = new Library("Neilson","7 Neilson Drive",4, true);
+        Library Neilson = new Library("Neilson", "7 Neilson Drive", 4, true);
 
         // Enter the library and display options
         Neilson.enter();
@@ -162,25 +194,12 @@ public class Library extends Building {
 
         // Remove books
         try {
-            Neilson.removeTitle("Hunger Games");        
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-        try {
-            Neilson.removeTitle("Fifty Shades of Black");
+            Neilson.removeTitle("Hunger Games");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
         // Check out books
-    
-        try {
-            Neilson.checkOut("Fifty Shades of Black");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
         try {
             Neilson.checkOut("Fifty Shades of Grey");
         } catch (Exception e) {
@@ -188,18 +207,10 @@ public class Library extends Building {
         }
 
         Neilson.checkOut("R for Data Science");
-        Neilson.checkOut("The Outsiders");
 
         // Return Book
-        
         try {
             Neilson.returnBook("Fifty Shades of Grey");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-        try {
-            Neilson.returnBook("Hunger Games");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -207,37 +218,14 @@ public class Library extends Building {
         // Check if available
         Neilson.isAvailable("10 things I love about you");
 
-        try {
-            Neilson.isAvailable("Shoe Dog");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        
         // Print the collection
         Neilson.printCollection();
 
-        
-        // Test moving between floors
-        Neilson.goToFloor(3); // Should work as the library has an elevator
-        Neilson.goDown();     // Move down one floor
-        Neilson.goToFloor(1); // Go back to the ground floor
-    
-        // Test error and exit
-        try {
-            Neilson.enter();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-        Neilson.exit();
-
         // Test overloaded methods
-        
         Library smallLibrary = new Library("Neighborhood Library", "222 Elm St"); // Using overloaded constructor
         ArrayList<String> newBooks = new ArrayList<>();
         newBooks.add("To Kill a Mockingbird");
         newBooks.add("The Great Gatsby");
         smallLibrary.addTitle(newBooks); // Using overloaded addTitle
-
     }
-  }
+}

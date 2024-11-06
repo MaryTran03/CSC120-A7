@@ -37,6 +37,10 @@
         this(name, address, nFloors, coffee, 50, 50, cups); // Default 50 sugar and 50 cream
     }
 
+   /**
+    * Displays available options for actions that can be performed in the cafe.
+    */
+
     @Override
     public void showOptions() {
         super.showOptions();
@@ -124,6 +128,12 @@
         
         // Enter the cafe and display options
         CC.enter();
+        try {
+            CC.goToFloor(2);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
         CC.showOptions();
         
         CC.sellCoffee(12, 2, 2);
@@ -137,6 +147,7 @@
 
         // Exit the cafe
         CC.exit();
+
 
     }
 }
