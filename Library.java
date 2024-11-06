@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -8,19 +9,28 @@ import java.util.Map;
 public class Library extends Building {
 
     private Hashtable<String, Boolean> collection;
+    private boolean hasElevator;
 
-    /**
-     * Constructs a new Library object with the given name, address, and number of floors.
-     * Initializes an empty collection of books.
-     *
-     * @param name    the name of the library
-     * @param address the address of the library
-     * @param nFloors the number of floors in the library
-     */
-    public Library(String name, String address, int nFloors) {
+    public Library(String name, String address, int nFloors, boolean hasElevator) {
         super(name, address, nFloors);
-        this.collection = new Hashtable<String, Boolean>();
+        this.collection = new Hashtable<>();
+        this.hasElevator = hasElevator;
         System.out.println("You have built a library!");
+    }
+
+    @Override
+    public void showOptions() {
+        super.showOptions();
+        System.out.println(" + addTitle(title) \n + removeTitle(title) \n + checkOut(title) \n + returnBook(title) \n + printCollection()");
+    }
+
+    @Override
+    public void goToFloor(int floorNum) {
+        if (hasElevator || Math.abs(this.activeFloor - floorNum) == 1) {
+            super.goToFloor(floorNum);
+        } else {
+            throw new RuntimeException("This library does not have an elevator. You can only move to adjacent floors.");
+        }
     }
 
     /**
@@ -34,6 +44,20 @@ public class Library extends Building {
             throw new RuntimeException("Title already in collection");
         } else {
             this.collection.put(title, true);
+        }
+    }
+
+    // Overloaded Constructor with default single floor
+    public Library(String name, String address) {
+        this(name, address, 1, false); // Default to 1 floor, no elevator
+    }
+
+    // Overloaded addTitle method to add multiple books at once
+    public void addTitle(ArrayList<String> titles) {
+        for (String title : titles) {
+            if (!this.collection.containsKey(title)) {
+                this.collection.put(title, true);
+            }
         }
     }
 
@@ -121,72 +145,99 @@ public class Library extends Building {
     }
 
     public static void main(String[] args) {
-      Library Neilson = new Library("Neilson","7 Neilson Drive",4);
+        Library Neilson = new Library("Neilson","7 Neilson Drive",4, true);
 
-      // Add books
-      Neilson.addTitle("Hunger Games");
-      Neilson.addTitle("Harry Potter");
-      Neilson.addTitle("Fifty Shades of Grey");
-      Neilson.addTitle("R for Data Science");
-      Neilson.addTitle("The Miracle in Cell No 7");
-      Neilson.addTitle("10 things I love about you");
-      Neilson.addTitle("The Outsiders");
+        // Enter the library and display options
+        Neilson.enter();
+        Neilson.showOptions();
 
-      // Remove books
-      try {
-        Neilson.removeTitle("Hunger Games");        
-      } catch (Exception e) {
-        System.out.println(e.getMessage());
-      }
+        // Add books
+        Neilson.addTitle("Hunger Games");
+        Neilson.addTitle("Harry Potter");
+        Neilson.addTitle("Fifty Shades of Grey");
+        Neilson.addTitle("R for Data Science");
+        Neilson.addTitle("The Miracle in Cell No 7");
+        Neilson.addTitle("10 things I love about you");
+        Neilson.addTitle("The Outsiders");
 
-      try {
-        Neilson.removeTitle("Fifty Shades of Black");
-      } catch (Exception e) {
-        System.out.println(e.getMessage());
-      }
+        // Remove books
+        try {
+            Neilson.removeTitle("Hunger Games");        
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
-      // Check out books
-  
-      try {
-        Neilson.checkOut("Fifty Shades of Black");
-      } catch (Exception e) {
-        System.out.println(e.getMessage());
-      }
+        try {
+            Neilson.removeTitle("Fifty Shades of Black");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
-      try {
-        Neilson.checkOut("Fifty Shades of Grey");
-      } catch (Exception e) {
-        System.out.println(e.getMessage());
-      }
+        // Check out books
+    
+        try {
+            Neilson.checkOut("Fifty Shades of Black");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
-      Neilson.checkOut("R for Data Science");
-      Neilson.checkOut("The Outsiders");
+        try {
+            Neilson.checkOut("Fifty Shades of Grey");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
-      // Return Book
-      
-      try {
-        Neilson.returnBook("Fifty Shades of Grey");
-      } catch (Exception e) {
-        System.out.println(e.getMessage());
-      }
+        Neilson.checkOut("R for Data Science");
+        Neilson.checkOut("The Outsiders");
 
-      try {
-        Neilson.returnBook("Hunger Games");
-      } catch (Exception e) {
-        System.out.println(e.getMessage());
-      }
+        // Return Book
+        
+        try {
+            Neilson.returnBook("Fifty Shades of Grey");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
-      // Check if available
-      Neilson.isAvailable("10 things I love about you");
+        try {
+            Neilson.returnBook("Hunger Games");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
-      try {
-        Neilson.isAvailable("Shoe Dog");
-      } catch (Exception e) {
-        System.out.println(e.getMessage());
-      }
-      
-      // Print the collection
-      Neilson.printCollection();
+        // Check if available
+        Neilson.isAvailable("10 things I love about you");
+
+        try {
+            Neilson.isAvailable("Shoe Dog");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        
+        // Print the collection
+        Neilson.printCollection();
+
+        
+        // Test moving between floors
+        Neilson.goToFloor(3); // Should work as the library has an elevator
+        Neilson.goDown();     // Move down one floor
+        Neilson.goToFloor(1); // Go back to the ground floor
+    
+        // Test error and exit
+        try {
+            Neilson.enter();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        Neilson.exit();
+
+        // Test overloaded methods
+        
+        Library smallLibrary = new Library("Neighborhood Library", "222 Elm St"); // Using overloaded constructor
+        ArrayList<String> newBooks = new ArrayList<>();
+        newBooks.add("To Kill a Mockingbird");
+        newBooks.add("The Great Gatsby");
+        smallLibrary.addTitle(newBooks); // Using overloaded addTitle
 
     }
   }

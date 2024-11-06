@@ -42,9 +42,48 @@ public class CampusMap {
 
     public static void main(String[] args) {
         CampusMap myMap = new CampusMap();
-        myMap.addBuilding(new Building("Ford Hall", "100 Green Street Northampton, MA 01063", 4));
-        myMap.addBuilding(new Building("Bass Hall", "4 Tyler Court Northampton, MA 01063", 4));
+
+        // Add different buildings to the map, demonstrating overloaded constructors and methods
+
+        // Using overloaded constructor in House (without elevator)
+        myMap.addBuilding(new House("Albright House", "34 Elm Street", 3, true));
+        // Using overloaded constructor in House (with elevator)
+        myMap.addBuilding(new House("Chase House", "12 Elm Street", 4, true, true));
+
+        // Using overloaded constructor in Library (default single floor)
+        myMap.addBuilding(new Library("Hillyer Art Library", "20 Elm Street"));
+        // Using overloaded constructor in Library (multi-floor, with elevator)
+        myMap.addBuilding(new Library("Young Science Library", "44 Elm Street", 4, true));
+
+        // Using overloaded constructor in Cafe (default sugar and cream inventory)
+        myMap.addBuilding(new Cafe("Campus Cafe", "5 Chapin Way", 1, 100, 50));
+        // Using full constructor in Cafe
+        myMap.addBuilding(new Cafe("Nielson Cafe", "7 Neilson Drive", 2, 150, 60, 60, 80));
+
+        // Add more buildings using standard constructors in Building
+        myMap.addBuilding(new Building("Ford Hall", "100 Green Street", 4));
+        myMap.addBuilding(new Building("Bass Hall", "4 Tyler Court", 4));
+        myMap.addBuilding(new Building("McConnell Hall", "2 College Lane", 5));
+        myMap.addBuilding(new Building("Burton Hall", "1 Henshaw Avenue", 3));
+        myMap.addBuilding(new Building("Seelye Hall", "101 Seelye Drive", 3));
+
+        // Demonstrate usage of overloaded methods
+        House chaseHouse = new House("Chase House", "12 Elm Street", 4, true, true);
+        ArrayList<String> residents = new ArrayList<>();
+        residents.add("Alice");
+        residents.add("Bob");
+        chaseHouse.moveIn(residents); // Using overloaded moveIn method to add multiple residents
+
+        Library youngLibrary = new Library("Young Science Library", "44 Elm Street", 4, true);
+        ArrayList<String> newBooks = new ArrayList<>();
+        newBooks.add("Biology 101");
+        newBooks.add("Physics for Scientists");
+        youngLibrary.addTitle(newBooks); // Using overloaded addTitle method to add multiple books
+
+        Cafe campusCafe = new Cafe("Campus Cafe", "5 Chapin Way", 1, 100, 50);
+        campusCafe.sellCoffee(12); // Using overloaded sellCoffee method with default sugar and cream
+
+        // Print the Campus Map
         System.out.println(myMap);
     }
-    
 }
